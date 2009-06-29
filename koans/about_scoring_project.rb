@@ -30,7 +30,35 @@ require 'edgecase'
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  if dice.size > 5
+    fail "Up to 5 dice only"
+  end
+  result = 0
+  rolls = [0, 0, 0, 0, 0, 0, 0]     
+  while dice != []  
+    roll = dice[0]   
+    rolls[roll] +=1
+    dice.shift      
+  end
+    
+  if rolls[1] >=3
+    result += 1000 + (rolls[1] - 3) * 100
+  else
+     result += rolls[1] * 100
+  end    
+   
+  result += 200 unless rolls[2] < 3
+  result += 300 unless rolls[3] < 3
+  result += 400 unless rolls[4] < 3
+  
+  if rolls[5] >=3
+    result += 500 + (rolls[5] - 3) * 50
+  else
+     result += rolls[5] * 50
+  end     
+  
+  result += 600 unless rolls[6] < 3
+  result
 end
 
 class AboutScoringAssignment < EdgeCase::Koan
@@ -67,7 +95,7 @@ class AboutScoringAssignment < EdgeCase::Koan
   end
 
   def test_score_of_mixed_is_sum
-    assert_equal 50, score([2,5,2,2,3])
+    assert_equal 250, score([2,5,2,2,3])
     assert_equal 550, score([5,5,5,5])
   end
 

@@ -10,11 +10,32 @@ require 'edgecase'
 #
 # The proxy class is started for you.  You will need to add a method
 # missing handler and any other supporting methods.  The specification
-# of the Proxy class is given in the AboutProxyObjectProject koan.
+# of the Proxy class is given in the AboutProxyObjectProject koan.    
 
 class Proxy
+  attr_reader :messages
   def initialize(target_object)
     @object = target_object
+    @messages = Array.new
+    @times = Hash.new
+  end
+  def called?(method_name)
+    return false unless @times[:"#{method_name}"]
+    return true
+  end
+  def number_of_times_called(method_name)
+    return  0 unless @times[:"#{method_name}"]
+    return @times[:"#{method_name}"]
+  end
+  
+  def method_missing(method_name, *args) 
+     @messages << :"#{method_name}"
+     @times[:"#{method_name}"] = 0 if @times[:"#{method_name}"].nil?
+     @times[:"#{method_name}"] += 1
+     if args == []       
+       return val = @object.send("#{method_name}")      
+     end     
+     return val = @object.send("#{method_name}",*args)      
   end
 end
 
@@ -61,7 +82,7 @@ class AboutProxyObjectProject < EdgeCase::Koan
     tv.power
     tv.power
     
-    assert tv.called?(:power)
+    assert tv.called?(:power)    
     assert ! tv.called?(:channel)
   end
   

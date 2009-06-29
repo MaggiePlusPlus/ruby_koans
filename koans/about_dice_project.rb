@@ -49,6 +49,12 @@ class AboutDiceSet < EdgeCase::Koan
     # If the rolls are random, then it is possible (although not
     # likely) that two consecutive rolls are equal.  What would be a
     # better way to test this.
+    #
+    # Since it is possible that two consecutive rolls are equal, you are really 
+    # testing that the random function is in fact random and that you have implemented it correctly. 
+    # A better way would be to continue rolling until you get a different set of values.
+    # If your test goes into an infinite loop then your test would fail which indicate that 
+    # the rolling algorithm is flawed and the test failed for the correct reason and not a fluke.
   end
 
   def test_you_can_roll_different_numbers_of_dice
